@@ -23,6 +23,7 @@ const Phone: FC = (): ReactElement => {
   const [phoneState, setPhoneState] = useState<phoneState>("hungUp");
   const [dialingState, setDialingState] = useState<dialingState>(null);
   const mousePosition = useRef({ x: 0, y: 0 });
+  console.log(".");
 
   useEffect(() => {
     const Xposition = mousePosition.current.x;
