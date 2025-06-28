@@ -22,6 +22,9 @@ const Phone: FC = (): ReactElement => {
   const Hand = useRef<HTMLImageElement>(null);
   const [phoneState, setPhoneState] = useState<phoneState>("hungUp");
   const [dialingState, setDialingState] = useState<dialingState>(null);
+  const [phoneSource, setPhoneSource] = useState<string>(
+    "/Phone/phone_hungUp.png"
+  );
   const mousePosition = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -29,6 +32,14 @@ const Phone: FC = (): ReactElement => {
     const Yposition = mousePosition.current.y;
     setHandPosition(Xposition, Yposition);
   }, [phoneState]);
+
+  useEffect(() => {
+    if (phoneState == "pressing") {
+      setPhoneSource(`/Phone/phone_pressing_${dialingState}.png`);
+    } else {
+      setPhoneSource(`/Phone/phone_${phoneState}.png`);
+    }
+  }, [dialingState, phoneState]);
 
   const setHandPosition = (Xposition: number, Yposition: number) => {
     const newLeft = phoneState != "hungUp" ? Xposition - 592 : Xposition - 140;
@@ -61,6 +72,7 @@ const Phone: FC = (): ReactElement => {
 
     const sound = new Audio(`Phone/audio/key${key}.mp3`);
     sound.play();
+    console.log(`pressed key: ${key}`);
     setPhoneState("pressing");
     setDialingState(key as dialingState);
   };
@@ -76,13 +88,6 @@ const Phone: FC = (): ReactElement => {
       : "/arm_pointing_pixellated.png";
 
   const handClass = phoneState == "hungUp" ? "hand-reaching" : "hand-pointing";
-
-  let phoneSource;
-  if (phoneState == "pressing") {
-    phoneSource = `/Phone/phone_pressing_${dialingState}.png`;
-  } else {
-    phoneSource = `/Phone/phone_${phoneState}.png`;
-  }
 
   const buttonOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, "star", 0, "pound"];
 
